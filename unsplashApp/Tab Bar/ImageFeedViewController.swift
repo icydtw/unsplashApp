@@ -26,6 +26,14 @@ final class ImageFeedViewController: UIViewController {
         return collection
     }()
     
+    let searchBar: UISearchBar = {
+        let bar = UISearchBar()
+        bar.placeholder = "Search..."
+        
+        bar.translatesAutoresizingMaskIntoConstraints = false
+        return bar
+    }()
+    
     // MARK: - Methods
     
     override func viewDidLoad() {
@@ -40,19 +48,26 @@ final class ImageFeedViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             imageCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             imageCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            imageCollection.topAnchor.constraint(equalTo: view.topAnchor),
-            imageCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            imageCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            imageCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
     
     /// Properties settings
     private func setupProperties() {
         view.addSubview(imageCollection)
+        view.addSubview(searchBar)
         imageCollection.dataSource = self
         imageCollection.delegate = self
+        searchBar.delegate = self
         likedPhotos = viewModel?.getLikedPhoto() ?? []
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
     
     /// Binding
@@ -76,10 +91,10 @@ final class ImageFeedViewController: UIViewController {
             DispatchQueue.main.async {
                 self?.imageCollection.reloadData()
             }
-        }, onError: { error in
+        }, onError: { [weak self] error in
             Alert.shared.displayErrorAlert(message: "Can't download images") { alert in
                 DispatchQueue.main.async {
-                    self.present(alert, animated: true)
+                    self?.present(alert, animated: true)
                 }
             }
         })
@@ -103,6 +118,11 @@ final class ImageFeedViewController: UIViewController {
         getLikedPhotos()
     }
     
+    @objc func hideKeyboard() {
+        view.endEditing(true)
+        searchBar.resignFirstResponder()
+    }
+
 }
 
 // MARK: - Extension for UICollectionViewDataSource
@@ -158,4 +178,27 @@ extension ImageFeedViewController: UICollectionViewDelegateFlowLayout {
         return 4
     }
     
+}
+
+// MARK: - Extension for UISearchBarDelegate
+extension ImageFeedViewController: UISearchBarDelegate {
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel?.search(searchString: searchText, completion: { [weak self] result in
+            self?.photos = []
+            self?.photos.append(contentsOf: result)
+            if self?.photos.count == 0 {
+                self?.getPhotos()
+                DispatchQueue.main.async {
+                    self?.getLikedPhotos()
+                }
+            }
+            DispatchQueue.main.async {
+                self?.imageCollection.reloadData()
+            }
+        }, onError: { error in
+
+        })
+    }
+
 }

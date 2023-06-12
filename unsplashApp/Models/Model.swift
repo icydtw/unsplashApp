@@ -26,6 +26,17 @@ struct Photo: Codable {
     let created_at: String?
 }
 
+struct Welcome: Codable {
+    let total, totalPages: Int?
+    let results: [Photo]?
+
+    enum CodingKeys: String, CodingKey {
+        case total
+        case totalPages = "total_pages"
+        case results
+    }
+}
+
 // MARK: - Protocols
 
 protocol ModelProtocol {
@@ -33,6 +44,7 @@ protocol ModelProtocol {
     func like(photo: Photo) -> Bool
     func dislike(photo: Photo) -> Bool
     func getLikedPhoto() -> [Photo]
+    func search(searchString: String, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
 }
 
 // MARK: - MODEL
@@ -134,6 +146,28 @@ final class Model: ModelProtocol {
         } catch {
             return []
         }
+    }
+    
+    func search(searchString: String, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
+        guard var urlComponents = URLComponents(string: urlString + "search/photos") else { return }
+        urlComponents.queryItems = [
+            URLQueryItem(name: "client_id", value: accessKey),
+            URLQueryItem(name: "query", value: searchString)
+        ]
+        guard let url = urlComponents.url else { return }
+        let request = URLRequest(url: url)
+        var result: [Photo] = []
+        let _ = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            guard let data = data else { return }
+            let decoder = JSONDecoder()
+            do {
+                result = try decoder.decode(Welcome.self, from: data).results ?? []
+                completion(result)
+            } catch {
+                print("ERROR \(#function) \(error)")
+                onError(error)
+            }
+        }).resume()
     }
     
 }

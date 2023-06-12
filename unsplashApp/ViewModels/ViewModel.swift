@@ -17,6 +17,7 @@ protocol ViewModelProtocol {
     func like(photo: Photo, index: IndexPath)
     func dislike(photo: Photo, index: IndexPath)
     func getLikedPhoto() -> [Photo]
+    func search(searchString: String, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
 }
 
 // MARK: - VIEW-MODEL
@@ -61,6 +62,14 @@ final class ViewModel: ViewModelProtocol {
     func getLikedPhoto() -> [Photo] {
         guard let result = model?.getLikedPhoto() else { return [] }
         return result
+    }
+    
+    func search(searchString: String, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
+        model?.search(searchString: searchString, completion: { photos in
+            completion(photos)
+        }, onError: { error in
+            onError(error)
+        })
     }
     
 }
