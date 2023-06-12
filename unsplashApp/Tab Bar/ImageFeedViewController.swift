@@ -91,14 +91,16 @@ final class ImageFeedViewController: UIViewController {
     /// Function that fetching photos
     private func getPhotos() {
         viewModel?.getPhotos(page: page, completion: { [weak self] result in
-            self?.photos.append(contentsOf: result)
+            guard let self = self else { return }
+            self.photos.append(contentsOf: result)
             DispatchQueue.main.async {
-                self?.imageCollection.reloadData()
+                self.imageCollection.reloadData()
             }
         }, onError: { [weak self] error in
             Alert.shared.displayErrorAlert(message: "Can't download images") { alert in
+                guard let self = self else { return }
                 DispatchQueue.main.async {
-                    self?.present(alert, animated: true)
+                    self.present(alert, animated: true)
                 }
             }
         })
@@ -113,19 +115,20 @@ final class ImageFeedViewController: UIViewController {
     
     private func getSearchPhoto(searchText: String) {
         viewModel?.search(searchString: searchText, completion: { [weak self] result in
-            self?.isSearch = true
-            self?.photos = []
-            self?.photos.append(contentsOf: result)
-            if self?.photos.count == 0 {
-                self?.isSearch = false
-                self?.page = 1
-                self?.getPhotos()
+            guard let self = self else { return }
+            self.isSearch = true
+            self.photos = []
+            self.photos.append(contentsOf: result)
+            if self.photos.count == 0 {
+                self.isSearch = false
+                self.page = 1
+                self.getPhotos()
                 DispatchQueue.main.async {
-                    self?.getLikedPhotos()
+                    self.getLikedPhotos()
                 }
             }
             DispatchQueue.main.async {
-                self?.imageCollection.reloadData()
+                self.imageCollection.reloadData()
             }
         }, onError: { error in
 
