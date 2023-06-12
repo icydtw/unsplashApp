@@ -40,7 +40,7 @@ struct Welcome: Codable {
 // MARK: - Protocols
 
 protocol ModelProtocol {
-    func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
+    func getPhotos(page: Int, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
     func like(photo: Photo) -> Bool
     func dislike(photo: Photo) -> Bool
     func getLikedPhoto() -> [Photo]
@@ -56,13 +56,12 @@ final class Model: ModelProtocol {
     
     let accessKey = "LUFz7Gq43MPt3wtmlzhixhbEAneHlJK4Cv1xKaHpvtg"
     
-    var page = 0
+    //var page = 0
     
     // MARK: - Functions
     
     /// A function that retrieves photos from a remote server
-    func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
-        page += 1
+    func getPhotos(page: Int, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
         guard var urlComponents = URLComponents(string: urlString + "photos") else { return }
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: accessKey),

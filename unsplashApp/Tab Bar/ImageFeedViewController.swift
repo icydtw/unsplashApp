@@ -18,6 +18,8 @@ final class ImageFeedViewController: UIViewController {
     
     var likedPhotos: [Photo] = []
     
+    var page = 1
+    
     let imageCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -86,7 +88,7 @@ final class ImageFeedViewController: UIViewController {
     
     /// Function that fetching photos
     private func getPhotos() {
-        viewModel?.getPhotos(completion: { [weak self] result in
+        viewModel?.getPhotos(page: page, completion: { [weak self] result in
             self?.photos.append(contentsOf: result)
             DispatchQueue.main.async {
                 self?.imageCollection.reloadData()
@@ -98,6 +100,7 @@ final class ImageFeedViewController: UIViewController {
                 }
             }
         })
+        page += 1
     }
     
     /// Function that fetching liked photos

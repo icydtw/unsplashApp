@@ -13,7 +13,7 @@ typealias Binding<T> = (T) -> Void
 protocol ViewModelProtocol {
     var isLiked: Binding<IndexPath>? { get set }
     var isDisliked: Binding<IndexPath>? { get set }
-    func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
+    func getPhotos(page: Int, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
     func like(photo: Photo, index: IndexPath)
     func dislike(photo: Photo, index: IndexPath)
     func getLikedPhoto() -> [Photo]
@@ -34,8 +34,8 @@ final class ViewModel: ViewModelProtocol {
     // MARK: - Functions
     
     /// A function that retrieves photos from a remote server
-    func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
-        model?.getPhotos(completion: { photos in
+    func getPhotos(page: Int, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
+        model?.getPhotos(page: page, completion: { photos in
             completion(photos)
         }, onError: { error in
             onError(error)
