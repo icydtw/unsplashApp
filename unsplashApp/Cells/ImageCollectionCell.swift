@@ -10,6 +10,9 @@ import UIKit
 final class ImageCollectionCell: UICollectionViewCell {
     
     // MARK: - Properties
+    
+    var isLiked: Bool = false
+    
     let image: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "plug")
@@ -23,7 +26,7 @@ final class ImageCollectionCell: UICollectionViewCell {
         let image = UIImage(named: "heart.fill")
         button.imageView?.contentMode = .scaleAspectFit
         button.setImage(image, for: .normal)
-        button.tintColor = .red
+        button.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -55,6 +58,18 @@ final class ImageCollectionCell: UICollectionViewCell {
             likeButton.heightAnchor.constraint(equalToConstant: 35),
             likeButton.widthAnchor.constraint(equalToConstant: 35)
         ])
+    }
+    
+    @objc
+    private func likeTapped() {
+        
+        if isLiked == false {
+//            likeButton.setImage(UIImage(named: "heart.fill.red"), for: .normal)
+//            isLiked = true
+        } else {
+//            likeButton.setImage(UIImage(named: "heart.fill"), for: .normal)
+//            isLiked = false
+        }
     }
     
 }
