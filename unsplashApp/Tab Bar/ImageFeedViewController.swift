@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ImageFeedViewController: UIViewController {
     
@@ -53,7 +54,16 @@ final class ImageFeedViewController: UIViewController {
     /// Function that fetching photos
     private func getPhotos() {
         viewModel?.getPhotos(completion: { [weak self] result in
-            self?.photos = result
+            self?.photos.append(contentsOf: result)
+            DispatchQueue.main.async {
+                self?.imageCollection.reloadData()
+            }
+        }, onError: { error in
+            Alert.shared.displayErrorAlert(message: "Can't download images") { alert in
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true)
+                }
+            }
         })
     }
     
@@ -63,11 +73,16 @@ final class ImageFeedViewController: UIViewController {
 extension ImageFeedViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return photos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as? ImageCollectionCell else { return UICollectionViewCell()}
+        guard let url = URL(string: photos[indexPath.row].urls?.small ?? "") else { return UICollectionViewCell()}
+        cell.image.kf.setImage(with: url, placeholder: UIImage(named: "plug"))
+        if indexPath.row == photos.count - 5 {
+            getPhotos()
+        }
         return cell
     }
     

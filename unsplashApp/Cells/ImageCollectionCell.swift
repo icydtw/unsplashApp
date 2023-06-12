@@ -12,9 +12,20 @@ final class ImageCollectionCell: UICollectionViewCell {
     // MARK: - Properties
     let image: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .red
+        imageView.image = UIImage(named: "plug")
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+    
+    let likeButton: UIButton = {
+        let button = UIButton()
+        let image = UIImage(named: "heart.fill")
+        button.imageView?.contentMode = .scaleAspectFit
+        button.setImage(image, for: .normal)
+        button.tintColor = .red
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     /// Init
@@ -30,13 +41,19 @@ final class ImageCollectionCell: UICollectionViewCell {
     private func setupView() {
         contentView.backgroundColor = .white
         contentView.addSubview(image)
+        contentView.addSubview(likeButton)
         contentView.layer.cornerRadius = 16
         image.layer.cornerRadius = 16
+        image.layer.masksToBounds = true
         NSLayoutConstraint.activate([
             image.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             image.topAnchor.constraint(equalTo: contentView.topAnchor),
-            image.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            image.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            likeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            likeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            likeButton.heightAnchor.constraint(equalToConstant: 35),
+            likeButton.widthAnchor.constraint(equalToConstant: 35)
         ])
     }
     

@@ -22,7 +22,7 @@ struct Photo: Codable {
 }
 
 protocol ModelProtocol {
-    func getPhotos(completion: @escaping ([Photo]) -> Void)
+    func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
 }
 
 final class Model: ModelProtocol {
@@ -33,12 +33,13 @@ final class Model: ModelProtocol {
     
     var page = 0
     
-    func getPhotos(completion: @escaping ([Photo]) -> Void) {
-        page = 1
+    func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
+        page += 1
         guard var urlComponents = URLComponents(string: urlString + "photos") else { return }
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: accessKey),
-            URLQueryItem(name: "page", value: "\(page)")
+            URLQueryItem(name: "page", value: "\(page)"),
+            URLQueryItem(name: "per_page", value: "10")
         ]
         guard let url = urlComponents.url else { return }
         let request = URLRequest(url: url)
@@ -51,6 +52,7 @@ final class Model: ModelProtocol {
                 completion(result)
             } catch {
                 print("ERROR \(#function) \(error)")
+                onError(error)
             }
         }).resume()
     }
