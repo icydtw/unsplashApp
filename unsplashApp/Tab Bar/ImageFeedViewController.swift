@@ -11,6 +11,10 @@ final class ImageFeedViewController: UIViewController {
     
     // MARK: - Properties
     
+    var viewModel: ViewModelProtocol?
+    
+    var photos: [Photo] = []
+    
     let imageCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -25,6 +29,7 @@ final class ImageFeedViewController: UIViewController {
         super.viewDidLoad()
         setupProperties()
         setupView()
+        getPhotos()
     }
     
     /// Appearance customisation
@@ -43,6 +48,13 @@ final class ImageFeedViewController: UIViewController {
         view.addSubview(imageCollection)
         imageCollection.dataSource = self
         imageCollection.delegate = self
+    }
+    
+    /// Function that fetching photos
+    private func getPhotos() {
+        viewModel?.getPhotos(completion: { [weak self] result in
+            self?.photos = result
+        })
     }
     
 }

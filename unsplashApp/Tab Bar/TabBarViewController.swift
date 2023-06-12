@@ -31,6 +31,10 @@ final class TabBarViewController: UITabBarController {
         feed.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "house"), tag: 0)
         let favourites = FavouritesViewController()
         favourites.tabBarItem = UITabBarItem(title: "Favourites", image: UIImage(systemName: "heart"), tag: 1)
+        let viewModel = ViewModel()
+        let model = Model()
+        viewModel.model = model
+        feed.viewModel = viewModel
         viewControllers = [feed, favourites]
     }
     
