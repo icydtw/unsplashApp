@@ -85,16 +85,22 @@ final class ImageFeedViewController: UIViewController {
         })
     }
     
-    private func likePhoto(photo: Photo, index: IndexPath) {
-        viewModel?.like(photo: photo, index: index)
+    /// Function that fetching liked photos
+    private func getLikedPhotos() {
         likedPhotos = viewModel?.getLikedPhoto() ?? []
         imageCollection.reloadData()
     }
     
+    /// Function that add photo to "liked"
+    private func likePhoto(photo: Photo, index: IndexPath) {
+        viewModel?.like(photo: photo, index: index)
+        getLikedPhotos()
+    }
+    
+    /// Function that delete photo from "liked"
     private func dislikePhoto(photo: Photo, index: IndexPath) {
         viewModel?.dislike(photo: photo, index: index)
-        likedPhotos = viewModel?.getLikedPhoto() ?? []
-        imageCollection.reloadData()
+        getLikedPhotos()
     }
     
 }
@@ -133,8 +139,6 @@ extension ImageFeedViewController: UICollectionViewDataSource {
 
 // MARK: - Extension for UICollectionViewDelegate
 extension ImageFeedViewController: UICollectionViewDelegate {
-    
-    
     
 }
 

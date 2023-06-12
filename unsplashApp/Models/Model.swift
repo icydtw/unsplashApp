@@ -8,6 +8,8 @@
 import CoreData
 import UIKit
 
+// MARK: - Structs
+
 struct PhotoURLS: Codable {
     let full: String?
     let small: String?
@@ -24,6 +26,8 @@ struct Photo: Codable {
     let created_at: String?
 }
 
+// MARK: - Protocols
+
 protocol ModelProtocol {
     func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
     func like(photo: Photo) -> Bool
@@ -31,7 +35,10 @@ protocol ModelProtocol {
     func getLikedPhoto() -> [Photo]
 }
 
+// MARK: - MODEL
 final class Model: ModelProtocol {
+    
+    //  MARK: - Properties
     
     let urlString = "https://api.unsplash.com/"
     
@@ -39,6 +46,9 @@ final class Model: ModelProtocol {
     
     var page = 0
     
+    // MARK: - Functions
+    
+    /// A function that retrieves photos from a remote server
     func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
         page += 1
         guard var urlComponents = URLComponents(string: urlString + "photos") else { return }
@@ -63,6 +73,7 @@ final class Model: ModelProtocol {
         }).resume()
     }
     
+    /// Function to add a photo to the database as a favoured photo
     func like(photo: Photo) -> Bool {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persisnetContainer.viewContext else {
@@ -83,6 +94,7 @@ final class Model: ModelProtocol {
         return true
     }
     
+    /// Function to remove a photo from the database (unliked)
     func dislike(photo: Photo) -> Bool {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persisnetContainer.viewContext else {
@@ -101,6 +113,7 @@ final class Model: ModelProtocol {
         return true
     }
     
+    /// A function that receives the favoured photo
     func getLikedPhoto() -> [Photo] {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persisnetContainer.viewContext else {
