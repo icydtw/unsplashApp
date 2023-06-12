@@ -15,6 +15,7 @@ protocol ViewModelProtocol {
     func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
     func like(photo: Photo, index: IndexPath)
     func dislike(photo: Photo, index: IndexPath)
+    func getLikedPhoto() -> [Photo]
 }
 
 final class ViewModel: ViewModelProtocol {
@@ -45,6 +46,11 @@ final class ViewModel: ViewModelProtocol {
         if result {
             isDisliked?(index)
         }
+    }
+    
+    func getLikedPhoto() -> [Photo] {
+        guard let result = model?.getLikedPhoto() else { return [] }
+        return result
     }
     
 }

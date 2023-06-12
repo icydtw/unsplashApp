@@ -16,6 +16,8 @@ final class ImageFeedViewController: UIViewController {
     
     var photos: [Photo] = []
     
+    var likedPhotos: [Photo] = []
+    
     let imageCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -50,6 +52,7 @@ final class ImageFeedViewController: UIViewController {
         view.addSubview(imageCollection)
         imageCollection.dataSource = self
         imageCollection.delegate = self
+        likedPhotos = viewModel?.getLikedPhoto() ?? []
     }
     
     /// Binding
@@ -84,10 +87,14 @@ final class ImageFeedViewController: UIViewController {
     
     private func likePhoto(photo: Photo, index: IndexPath) {
         viewModel?.like(photo: photo, index: index)
+        likedPhotos = viewModel?.getLikedPhoto() ?? []
+        imageCollection.reloadData()
     }
     
     private func dislikePhoto(photo: Photo, index: IndexPath) {
         viewModel?.dislike(photo: photo, index: index)
+        likedPhotos = viewModel?.getLikedPhoto() ?? []
+        imageCollection.reloadData()
     }
     
 }
@@ -103,6 +110,13 @@ extension ImageFeedViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as? ImageCollectionCell else { return UICollectionViewCell()}
         guard let url = URL(string: photos[indexPath.row].urls?.small ?? "") else { return UICollectionViewCell()}
         cell.image.kf.setImage(with: url, placeholder: UIImage(named: "plug"))
+        if !likedPhotos.filter({$0.urls?.small == url.absoluteString}).isEmpty {
+            cell.likeButton.setImage(UIImage(named: "heart.fill.red"), for: .normal)
+            cell.isLiked = true
+        } else {
+            cell.likeButton.setImage(UIImage(named: "heart.fill"), for: .normal)
+            cell.isLiked = false
+        }
         if indexPath.row == photos.count - 5 {
             getPhotos()
         }

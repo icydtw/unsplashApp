@@ -28,6 +28,7 @@ protocol ModelProtocol {
     func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
     func like(photo: Photo) -> Bool
     func dislike(photo: Photo) -> Bool
+    func getLikedPhoto() -> [Photo]
 }
 
 final class Model: ModelProtocol {
@@ -68,7 +69,6 @@ final class Model: ModelProtocol {
             print("ERROR")
             return false
         }
-        let request = NSFetchRequest<LikedImages>(entityName: "LikedImages")
         let newLikedPhoto = LikedImages(context: context)
         newLikedPhoto.createdAt = photo.created_at
         newLikedPhoto.location = photo.user?.location
@@ -77,7 +77,6 @@ final class Model: ModelProtocol {
         newLikedPhoto.userName = photo.user?.name
         do {
             try context.save()
-            print(try context.fetch(request))
         } catch {
             return false
         }
@@ -95,11 +94,33 @@ final class Model: ModelProtocol {
         do {
             let photoToDelete = try context.fetch(request).first
             context.delete(photoToDelete ?? LikedImages())
-            print(try context.fetch(request))
+            try context.save()
         } catch {
             return false
         }
         return true
+    }
+    
+    func getLikedPhoto() -> [Photo] {
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        guard let context = appDelegate?.persisnetContainer.viewContext else {
+            print("ERROR")
+            return []
+        }
+        let request = NSFetchRequest<LikedImages>(entityName: "LikedImages")
+        var result: [Photo] = []
+        do {
+            let likedPhotos =  try context.fetch(request)
+            for photo in likedPhotos {
+                let photoURLS = PhotoURLS(full: photo.urlFull, small: photo.urlSmall)
+                let user = User(name: photo.userName, location: photo.location)
+                let photoToAdd = Photo(user: user, urls: photoURLS, created_at: photo.createdAt)
+                result.append(photoToAdd)
+            }
+            return result
+        } catch {
+            return []
+        }
     }
     
 }
