@@ -151,7 +151,8 @@ final class Model: ModelProtocol {
         guard var urlComponents = URLComponents(string: urlString + "search/photos") else { return }
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: accessKey),
-            URLQueryItem(name: "query", value: searchString)
+            URLQueryItem(name: "query", value: searchString),
+            URLQueryItem(name: "per_page", value: "30")
         ]
         guard let url = urlComponents.url else { return }
         let request = URLRequest(url: url)

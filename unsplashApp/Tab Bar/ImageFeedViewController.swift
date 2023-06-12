@@ -20,6 +20,8 @@ final class ImageFeedViewController: UIViewController {
     
     var page = 1
     
+    var isSearch = false
+    
     let imageCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -109,6 +111,27 @@ final class ImageFeedViewController: UIViewController {
         imageCollection.reloadData()
     }
     
+    private func getSearchPhoto(searchText: String) {
+        viewModel?.search(searchString: searchText, completion: { [weak self] result in
+            self?.isSearch = true
+            self?.photos = []
+            self?.photos.append(contentsOf: result)
+            if self?.photos.count == 0 {
+                self?.isSearch = false
+                self?.page = 1
+                self?.getPhotos()
+                DispatchQueue.main.async {
+                    self?.getLikedPhotos()
+                }
+            }
+            DispatchQueue.main.async {
+                self?.imageCollection.reloadData()
+            }
+        }, onError: { error in
+
+        })
+    }
+    
     /// Function that add photo to "liked"
     private func likePhoto(photo: Photo, index: IndexPath) {
         viewModel?.like(photo: photo, index: index)
@@ -146,7 +169,7 @@ extension ImageFeedViewController: UICollectionViewDataSource {
             cell.likeButton.setImage(UIImage(named: "heart.fill"), for: .normal)
             cell.isLiked = false
         }
-        if indexPath.row == photos.count - 5 {
+        if indexPath.row == photos.count - 5 && isSearch == false {
             getPhotos()
         }
         cell.likeHandler = {
@@ -187,21 +210,7 @@ extension ImageFeedViewController: UICollectionViewDelegateFlowLayout {
 extension ImageFeedViewController: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel?.search(searchString: searchText, completion: { [weak self] result in
-            self?.photos = []
-            self?.photos.append(contentsOf: result)
-            if self?.photos.count == 0 {
-                self?.getPhotos()
-                DispatchQueue.main.async {
-                    self?.getLikedPhotos()
-                }
-            }
-            DispatchQueue.main.async {
-                self?.imageCollection.reloadData()
-            }
-        }, onError: { error in
-
-        })
+        getSearchPhoto(searchText: searchText)
     }
 
 }
