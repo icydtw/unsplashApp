@@ -5,7 +5,8 @@
 //  Created by Илья Тимченко on 12.06.2023.
 //
 
-import Foundation
+import CoreData
+import UIKit
 
 struct PhotoURLS: Codable {
     let full: String?
@@ -14,15 +15,19 @@ struct PhotoURLS: Codable {
 
 struct User: Codable {
     let name: String?
+    let location: String?
 }
 
 struct Photo: Codable {
     let user: User?
     let urls: PhotoURLS?
+    let created_at: String?
 }
 
 protocol ModelProtocol {
     func getPhotos(completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
+    func like(photo: Photo) -> Bool
+    func dislike(photo: Photo) -> Bool
 }
 
 final class Model: ModelProtocol {
@@ -55,6 +60,46 @@ final class Model: ModelProtocol {
                 onError(error)
             }
         }).resume()
+    }
+    
+    func like(photo: Photo) -> Bool {
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        guard let context = appDelegate?.persisnetContainer.viewContext else {
+            print("ERROR")
+            return false
+        }
+        let request = NSFetchRequest<LikedImages>(entityName: "LikedImages")
+        let newLikedPhoto = LikedImages(context: context)
+        newLikedPhoto.createdAt = photo.created_at
+        newLikedPhoto.location = photo.user?.location
+        newLikedPhoto.urlFull = photo.urls?.full
+        newLikedPhoto.urlSmall = photo.urls?.small
+        newLikedPhoto.userName = photo.user?.name
+        do {
+            try context.save()
+            print(try context.fetch(request))
+        } catch {
+            return false
+        }
+        return true
+    }
+    
+    func dislike(photo: Photo) -> Bool {
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        guard let context = appDelegate?.persisnetContainer.viewContext else {
+            print("ERROR")
+            return false
+        }
+        let request = NSFetchRequest<LikedImages>(entityName: "LikedImages")
+        request.predicate = NSPredicate(format: "urlFull == %@", photo.urls?.full ?? "")
+        do {
+            let photoToDelete = try context.fetch(request).first
+            context.delete(photoToDelete ?? LikedImages())
+            print(try context.fetch(request))
+        } catch {
+            return false
+        }
+        return true
     }
     
 }

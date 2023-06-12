@@ -30,6 +30,7 @@ final class ImageFeedViewController: UIViewController {
         super.viewDidLoad()
         setupProperties()
         setupView()
+        bind()
         getPhotos()
     }
     
@@ -51,6 +52,20 @@ final class ImageFeedViewController: UIViewController {
         imageCollection.delegate = self
     }
     
+    /// Binding
+    private func bind() {
+        viewModel?.isLiked = { [weak self] index in
+            guard let self = self else { return }
+            let cell = self.imageCollection.cellForItem(at: index) as? ImageCollectionCell
+            cell?.likeButton.setImage(UIImage(named: "heart.fill.red"), for: .normal)
+        }
+        viewModel?.isDisliked = { [weak self] index in
+            guard let self = self else { return }
+            let cell = self.imageCollection.cellForItem(at: index) as? ImageCollectionCell
+            cell?.likeButton.setImage(UIImage(named: "heart.fill"), for: .normal)
+        }
+    }
+    
     /// Function that fetching photos
     private func getPhotos() {
         viewModel?.getPhotos(completion: { [weak self] result in
@@ -65,6 +80,14 @@ final class ImageFeedViewController: UIViewController {
                 }
             }
         })
+    }
+    
+    private func likePhoto(photo: Photo, index: IndexPath) {
+        viewModel?.like(photo: photo, index: index)
+    }
+    
+    private func dislikePhoto(photo: Photo, index: IndexPath) {
+        viewModel?.dislike(photo: photo, index: index)
     }
     
 }
@@ -82,6 +105,12 @@ extension ImageFeedViewController: UICollectionViewDataSource {
         cell.image.kf.setImage(with: url, placeholder: UIImage(named: "plug"))
         if indexPath.row == photos.count - 5 {
             getPhotos()
+        }
+        cell.likeHandler = {
+            self.likePhoto(photo: self.photos[indexPath.row], index: indexPath)
+        }
+        cell.dislikeHandler = {
+            self.dislikePhoto(photo: self.photos[indexPath.row], index: indexPath)
         }
         return cell
     }

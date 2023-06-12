@@ -7,12 +7,19 @@
 
 import UIKit
 
+typealias LikeHandler = () -> Void
+typealias DisLikeHandler = () -> Void
+
 final class ImageCollectionCell: UICollectionViewCell {
     
     // MARK: - Properties
     
     var isLiked: Bool = false
     
+    var likeHandler: LikeHandler?
+    
+    var dislikeHandler: DisLikeHandler?
+
     let image: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "plug")
@@ -62,13 +69,12 @@ final class ImageCollectionCell: UICollectionViewCell {
     
     @objc
     private func likeTapped() {
-        
         if isLiked == false {
-//            likeButton.setImage(UIImage(named: "heart.fill.red"), for: .normal)
-//            isLiked = true
+            isLiked = true
+            likeHandler?()
         } else {
-//            likeButton.setImage(UIImage(named: "heart.fill"), for: .normal)
-//            isLiked = false
+            isLiked = false
+            dislikeHandler?()
         }
     }
     
