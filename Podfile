@@ -7,4 +7,5 @@ target 'unsplashApp' do
 
   # Pods for unsplashApp
 pod 'Kingfisher', '~> 7.0'
+pod 'ProgressHUD'
 end

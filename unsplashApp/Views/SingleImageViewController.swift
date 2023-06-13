@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import ProgressHUD
 
 final class SingleImageViewController: UIViewController {
     
@@ -51,12 +52,12 @@ final class SingleImageViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(image)
         let url = URL(string: photo?.urls?.full ?? "")
-        image.kf.setImage(with: url, placeholder: UIImage(named: "plug")) { result in
-            print(self.image.image?.size)
-            print(self.view.frame.size)
+        ProgressHUD.show(interaction: false)
+        image.kf.setImage(with: url) { result in
             self.scrollView.minimumZoomScale = self.view.frame.size.width / (self.image.image?.size.width ?? 0)
-            self.scrollView.maximumZoomScale = 3.25
+            self.scrollView.maximumZoomScale = 3
             self.rescaleAndCenterImageInScrollView(image: self.image.image ?? UIImage())
+            ProgressHUD.dismiss()
         }
     }
     
