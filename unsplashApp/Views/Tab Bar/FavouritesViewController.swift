@@ -9,6 +9,8 @@ import UIKit
 
 final class FavouritesViewController: UIViewController {
     
+    
+    
     // MARK: - Methods
     
     override func viewDidLoad() {

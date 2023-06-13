@@ -47,6 +47,8 @@ final class ViewModel: ViewModelProtocol {
     func like(photo: Photo, index: IndexPath) {
         let result = model?.like(photo: photo) ?? false
         if result {
+            let notification = Notification(name: Notification.Name("liked"))
+            NotificationCenter.default.post(notification)
             isLiked?(index)
         }
     }
@@ -55,6 +57,8 @@ final class ViewModel: ViewModelProtocol {
     func dislike(photo: Photo, index: IndexPath) {
         let result = model?.dislike(photo: photo) ?? false
         if result {
+            let notification = Notification(name: Notification.Name("disliked"))
+            NotificationCenter.default.post(notification)
             isDisliked?(index)
         }
     }

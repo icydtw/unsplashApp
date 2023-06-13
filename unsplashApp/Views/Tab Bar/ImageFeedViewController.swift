@@ -73,6 +73,8 @@ final class ImageFeedViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: Notification.Name("liked"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: Notification.Name("disliked"), object: nil)
     }
     
     /// Binding
@@ -148,9 +150,16 @@ final class ImageFeedViewController: UIViewController {
         getLikedPhotos()
     }
     
-    @objc func hideKeyboard() {
+    @objc
+    func hideKeyboard() {
         view.endEditing(true)
         searchBar.resignFirstResponder()
+    }
+    
+    @objc
+    func updateView() {
+        likedPhotos = viewModel?.getLikedPhoto() ?? []
+        imageCollection.reloadData()
     }
 
 }
@@ -196,6 +205,11 @@ extension ImageFeedViewController: UICollectionViewDelegate {
         singleImageVC.modalPresentationStyle = .fullScreen
         singleImageVC.photo = photo
         singleImageVC.viewModel = viewModel
+        singleImageVC.indexOfPhoto = indexPath
+        guard let url = URL(string: photos[indexPath.row].urls?.small ?? "") else { return }
+        if !likedPhotos.filter({$0.urls?.small == url.absoluteString}).isEmpty {
+            singleImageVC.isLiked = true
+        }
         present(singleImageVC, animated: true)
     }
     

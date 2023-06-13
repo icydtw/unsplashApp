@@ -12,6 +12,10 @@ final class SingleImageViewController: UIViewController {
     
     // MARK: - Properties
     
+    var isLiked = false
+    
+    var indexOfPhoto: IndexPath?
+    
     var photo: Photo?
     
     var viewModel: ViewModelProtocol?
@@ -85,6 +89,14 @@ final class SingleImageViewController: UIViewController {
         return label
     }()
     
+    let likeButton: UIButton = {
+        let button = UIButton()
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     // MARK: - Functions
     
     override func viewDidLoad() {
@@ -115,8 +127,10 @@ final class SingleImageViewController: UIViewController {
             locationLabel.leadingAnchor.constraint(equalTo: informationView.leadingAnchor, constant: 8),
             downloadCount.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 8),
             downloadCount.leadingAnchor.constraint(equalTo: informationView.leadingAnchor, constant: 8),
+            likeButton.trailingAnchor.constraint(equalTo: informationView.trailingAnchor, constant: -8),
+            likeButton.centerYAnchor.constraint(equalTo: informationView.centerYAnchor),
             loadLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loadLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loadLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -132,6 +146,12 @@ final class SingleImageViewController: UIViewController {
         informationView.addSubview(createdDate)
         informationView.addSubview(locationLabel)
         informationView.addSubview(downloadCount)
+        informationView.addSubview(likeButton)
+        if isLiked {
+            likeButton.setImage(UIImage(named: "heart.fill.red"), for: .normal)
+        } else {
+            likeButton.setImage(UIImage(named: "heart.fill"), for: .normal)
+        }
         authorName.text = photo?.user?.name
         createdDate.text = convertDate(dateString: photo?.created_at! ?? "1970-01-01T12:00:00Z")
         locationLabel.text = photo?.user?.location
@@ -201,6 +221,22 @@ final class SingleImageViewController: UIViewController {
         cache.clearMemoryCache()
         cache.clearDiskCache()
         dismiss(animated: true)
+    }
+    
+    @objc
+    private func likeTapped() {
+        if let index = indexOfPhoto,
+           let photo = photo {
+            if isLiked == false {
+                isLiked = true
+                viewModel?.like(photo: photo, index: index)
+                likeButton.setImage(UIImage(named: "heart.fill.red"), for: .normal)
+            } else {
+                isLiked = false
+                viewModel?.dislike(photo: photo, index: index)
+                likeButton.setImage(UIImage(named: "heart.fill"), for: .normal)
+            }
+        }
     }
     
 }
