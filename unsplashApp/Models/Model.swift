@@ -11,7 +11,7 @@ import UIKit
 // MARK: - Structs
 
 struct PhotoURLS: Codable {
-    let full: String?
+    let regular: String?
     let small: String?
 }
 
@@ -103,7 +103,7 @@ final class Model: ModelProtocol {
         newLikedPhoto.photoID = photo.id
         newLikedPhoto.createdAt = photo.created_at
         newLikedPhoto.location = photo.user?.location
-        newLikedPhoto.urlFull = photo.urls?.full
+        newLikedPhoto.urlFull = photo.urls?.regular
         newLikedPhoto.urlSmall = photo.urls?.small
         newLikedPhoto.userName = photo.user?.name
         do {
@@ -122,7 +122,7 @@ final class Model: ModelProtocol {
             return false
         }
         let request = NSFetchRequest<LikedImages>(entityName: "LikedImages")
-        request.predicate = NSPredicate(format: "urlFull == %@", photo.urls?.full ?? "")
+        request.predicate = NSPredicate(format: "urlFull == %@", photo.urls?.regular ?? "")
         do {
             let photoToDelete = try context.fetch(request).first
             context.delete(photoToDelete ?? LikedImages())
@@ -145,7 +145,7 @@ final class Model: ModelProtocol {
         do {
             let likedPhotos =  try context.fetch(request)
             for photo in likedPhotos {
-                let photoURLS = PhotoURLS(full: photo.urlFull, small: photo.urlSmall)
+                let photoURLS = PhotoURLS(regular: photo.urlFull, small: photo.urlSmall)
                 let user = User(name: photo.userName, location: photo.location)
                 let photoToAdd = Photo(id: photo.photoID, user: user, urls: photoURLS, created_at: photo.createdAt)
                 result.append(photoToAdd)

@@ -194,7 +194,7 @@ final class SingleImageViewController: UIViewController {
     
     /// Function that uploads a photo
     private func loadImage() {
-        let url = URL(string: photo?.urls?.full ?? "")
+        let url = URL(string: photo?.urls?.regular ?? "")
         image.kf.setImage(with: url) { result in
             self.scrollView.minimumZoomScale = self.view.frame.size.width / (self.image.image?.size.width ?? 0)
             self.scrollView.maximumZoomScale = 3
