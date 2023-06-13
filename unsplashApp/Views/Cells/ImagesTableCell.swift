@@ -37,7 +37,6 @@ final class ImagesTableCell: UITableViewCell {
             photoView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             photoView.heightAnchor.constraint(equalToConstant: 40),
             photoView.widthAnchor.constraint(equalToConstant: 40),
-//            authorName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             authorName.leadingAnchor.constraint(equalTo: photoView.trailingAnchor, constant: 16),
             authorName.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
