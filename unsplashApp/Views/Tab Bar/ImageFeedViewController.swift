@@ -193,6 +193,7 @@ extension ImageFeedViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photo = photos[indexPath.row]
         let singleImageVC = SingleImageViewController()
+        singleImageVC.modalPresentationStyle = .fullScreen
         singleImageVC.photo = photo
         present(singleImageVC, animated: true)
     }
