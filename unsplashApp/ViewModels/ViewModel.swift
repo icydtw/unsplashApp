@@ -69,6 +69,7 @@ final class ViewModel: ViewModelProtocol {
         return result
     }
     
+    /// A function that makes a query for a search word
     func search(searchString: String, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
         model?.search(searchString: searchString, completion: { photos in
             completion(photos)
@@ -77,6 +78,7 @@ final class ViewModel: ViewModelProtocol {
         })
     }
     
+    /// Function returning the number of downloads
     func getTotalAmountOfDownloads(photoID: String, completion: @escaping (Int) -> Void, onError: @escaping (Error) -> Void) {
         model?.getTotalAmountOfDownloads(photoID: photoID, completion: { downloads in
             completion(downloads)

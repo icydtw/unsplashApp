@@ -38,9 +38,12 @@ final class ImageCollectionCell: UICollectionViewCell {
         return button
     }()
     
+    // MARK: - Functions
+    
     /// Init
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupProperties()
         setupView()
     }
     
@@ -48,10 +51,9 @@ final class ImageCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Appearance customisation
     private func setupView() {
         contentView.backgroundColor = .white
-        contentView.addSubview(image)
-        contentView.addSubview(likeButton)
         contentView.layer.cornerRadius = 16
         image.layer.cornerRadius = 16
         image.layer.masksToBounds = true
@@ -67,6 +69,13 @@ final class ImageCollectionCell: UICollectionViewCell {
         ])
     }
     
+    /// Properties settings
+    private func setupProperties() {
+        contentView.addSubview(image)
+        contentView.addSubview(likeButton)
+    }
+    
+    /// A method that handles the click to like button
     @objc
     private func likeTapped() {
         if isLiked == false {

@@ -66,8 +66,6 @@ final class Model: ModelProtocol {
     
     let accessKey = "LUFz7Gq43MPt3wtmlzhixhbEAneHlJK4Cv1xKaHpvtg"
     
-    //var page = 0
-    
     // MARK: - Functions
     
     /// A function that retrieves photos from a remote server
@@ -158,6 +156,7 @@ final class Model: ModelProtocol {
         }
     }
     
+    /// A function that makes a query for a search word
     func search(searchString: String, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void) {
         guard var urlComponents = URLComponents(string: urlString + "search/photos") else { return }
         urlComponents.queryItems = [
@@ -181,6 +180,7 @@ final class Model: ModelProtocol {
         }).resume()
     }
     
+    /// Function returning the number of downloads
     func getTotalAmountOfDownloads(photoID: String, completion: @escaping (Int) -> Void, onError: @escaping (Error) -> Void) {
         guard var urlComponents = URLComponents(string: urlString + "photos/\(photoID)/statistics") else { return }
         urlComponents.queryItems = [

@@ -105,6 +105,7 @@ final class SingleImageViewController: UIViewController {
         setupView()
     }
     
+    /// Appearance customisation
     private func setupView() {
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
@@ -134,6 +135,7 @@ final class SingleImageViewController: UIViewController {
         ])
     }
     
+    /// Properties settings
     private func setupProperties() {
         loadImage()
         scrollView.delegate = self
@@ -159,6 +161,7 @@ final class SingleImageViewController: UIViewController {
         getTotalAmountOfDownloads()
     }
     
+    /// Function that zooms in and centres the image
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
@@ -176,6 +179,7 @@ final class SingleImageViewController: UIViewController {
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
     
+    /// Date conversion function from string to date
     private func convertDate(dateString: String) -> String {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -188,6 +192,7 @@ final class SingleImageViewController: UIViewController {
         return ""
     }
     
+    /// Function that uploads a photo
     private func loadImage() {
         let url = URL(string: photo?.urls?.full ?? "")
         image.kf.setImage(with: url) { result in
@@ -199,22 +204,30 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
+    /// Function to centre the photo when resizing
     private func centerImage() {
         let offsetX = max((scrollView.bounds.width - scrollView.contentSize.width) * 0.5, 0)
         let offsetY = max((scrollView.bounds.height - scrollView.contentSize.height) * 0.5, 0)
         scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
     }
     
+    /// Function retrieving the number of downloads
     private func getTotalAmountOfDownloads() {
         viewModel?.getTotalAmountOfDownloads(photoID: photo?.id ?? "", completion: { downloads in
             DispatchQueue.main.async {
                 self.downloadCount.text = "\(downloads) downloads"
             }
         }, onError: { error in
-            
+            Alert.shared.displayErrorAlert(message: "Can't find downloads") { [weak self] alert in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true)
+                }
+            }
         })
     }
     
+    /// Function that handles pressing the back button
     @objc
     private func backButtonTapped() {
         let cache = ImageCache.default
@@ -223,6 +236,7 @@ final class SingleImageViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    /// Function that handles the press of the likes button
     @objc
     private func likeTapped() {
         if let index = indexOfPhoto,
@@ -240,6 +254,8 @@ final class SingleImageViewController: UIViewController {
     }
     
 }
+
+// MARK: - Extension for UIScrollViewDelegate
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? { image }

@@ -9,6 +9,8 @@ import UIKit
 
 final class ImagesTableCell: UITableViewCell {
     
+    // MARK: - Properties
+    
     let photoView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +23,9 @@ final class ImagesTableCell: UITableViewCell {
         return label
     }()
     
+    // MARK: - Functions
+    
+    /// Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupProperties()
@@ -31,6 +36,7 @@ final class ImagesTableCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Appearance customisation
     private func setupCellViewController() {
         NSLayoutConstraint.activate([
             photoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
@@ -42,6 +48,7 @@ final class ImagesTableCell: UITableViewCell {
         ])
     }
     
+    /// Properties settings
     private func setupProperties() {
         contentView.addSubview(photoView)
         contentView.addSubview(authorName)

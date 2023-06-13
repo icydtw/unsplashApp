@@ -24,6 +24,7 @@ final class TabBarViewController: UITabBarController {
         setupTabBar()
     }
     
+    /// Setting up the UITabBar.
     private func setupTabBar() {
         tabBar.backgroundColor = .white
         tabBar.tintColor = .black

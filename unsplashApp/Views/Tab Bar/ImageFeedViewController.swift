@@ -116,6 +116,7 @@ final class ImageFeedViewController: UIViewController {
         imageCollection.reloadData()
     }
     
+    /// A function that retrieves a photo by search.
     private func getSearchPhoto(searchText: String) {
         viewModel?.search(searchString: searchText, completion: { [weak self] result in
             guard let self = self else { return }
@@ -133,8 +134,13 @@ final class ImageFeedViewController: UIViewController {
             DispatchQueue.main.async {
                 self.imageCollection.reloadData()
             }
-        }, onError: { error in
-
+        }, onError: { [weak self] error in
+            Alert.shared.displayErrorAlert(message: "Can't download images") { alert in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true)
+                }
+            }
         })
     }
     
@@ -150,12 +156,14 @@ final class ImageFeedViewController: UIViewController {
         getLikedPhotos()
     }
     
+    /// Function that hides the keypad.
     @objc
     func hideKeyboard() {
         view.endEditing(true)
         searchBar.resignFirstResponder()
     }
     
+    /// Function that updates the View.
     @objc
     func updateView() {
         likedPhotos = viewModel?.getLikedPhoto() ?? []
@@ -215,18 +223,17 @@ extension ImageFeedViewController: UICollectionViewDelegate {
     
 }
 
+// MARK: - Extension for UICollectionViewDelegateFlowLayout
 extension ImageFeedViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (view.bounds.width / 2)-12, height: (view.bounds.width / 2)-12)
     }
     
-    /// Function that returns spacing between lines in collection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 8
     }
     
-    /// Function that returns spacing between items in section
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 4
     }

@@ -42,6 +42,7 @@ final class FavouritesViewController: UIViewController {
         ])
     }
     
+    /// Properties settings
     private func setupProperties() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: Notification.Name("liked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: Notification.Name("disliked"), object: nil)
@@ -51,10 +52,12 @@ final class FavouritesViewController: UIViewController {
         imagesTable.delegate = self
     }
     
+    /// A function that receives likes of photos.
     private func getLikedPhotos() {
         likedPhoto = viewModel?.getLikedPhoto() ?? []
     }
     
+    /// Function that updates the View.
     @objc
     private func updateView() {
         likedPhoto = viewModel?.getLikedPhoto() ?? []
@@ -63,7 +66,9 @@ final class FavouritesViewController: UIViewController {
     
 }
 
+// MARK: - Extension for UITableViewDataSource
 extension FavouritesViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return likedPhoto.count
     }
@@ -78,11 +83,14 @@ extension FavouritesViewController: UITableViewDataSource {
         cell.photoView.contentMode = .scaleAspectFit
         return cell
     }
+    
 }
 
+// MARK: - Extension for UITableViewDelegate
 extension FavouritesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         let photo = likedPhoto[indexPath.row]
         let singleImageVC = SingleImageViewController()
         singleImageVC.modalPresentationStyle = .fullScreen
