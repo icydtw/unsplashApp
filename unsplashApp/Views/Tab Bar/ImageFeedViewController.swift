@@ -195,6 +195,7 @@ extension ImageFeedViewController: UICollectionViewDelegate {
         let singleImageVC = SingleImageViewController()
         singleImageVC.modalPresentationStyle = .fullScreen
         singleImageVC.photo = photo
+        singleImageVC.viewModel = viewModel
         present(singleImageVC, animated: true)
     }
     

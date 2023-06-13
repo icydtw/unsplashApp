@@ -21,7 +21,7 @@ struct User: Codable {
 }
 
 struct Photo: Codable {
-    let photoID: String?
+    let id: String?
     let user: User?
     let urls: PhotoURLS?
     let created_at: String?
@@ -38,6 +38,14 @@ struct Welcome: Codable {
     }
 }
 
+struct Downloads: Codable {
+    let total: Int?
+}
+
+struct StructForDownloads: Codable {
+    let downloads: Downloads?
+}
+
 // MARK: - Protocols
 
 protocol ModelProtocol {
@@ -46,6 +54,7 @@ protocol ModelProtocol {
     func dislike(photo: Photo) -> Bool
     func getLikedPhoto() -> [Photo]
     func search(searchString: String, completion: @escaping ([Photo]) -> Void, onError: @escaping (Error) -> Void)
+    func getTotalAmountOfDownloads(photoID: String, completion: @escaping (Int) -> Void, onError: @escaping (Error) -> Void) 
 }
 
 // MARK: - MODEL
@@ -93,7 +102,7 @@ final class Model: ModelProtocol {
             return false
         }
         let newLikedPhoto = LikedImages(context: context)
-        newLikedPhoto.photoID = photo.photoID
+        newLikedPhoto.photoID = photo.id
         newLikedPhoto.createdAt = photo.created_at
         newLikedPhoto.location = photo.user?.location
         newLikedPhoto.urlFull = photo.urls?.full
@@ -140,7 +149,7 @@ final class Model: ModelProtocol {
             for photo in likedPhotos {
                 let photoURLS = PhotoURLS(full: photo.urlFull, small: photo.urlSmall)
                 let user = User(name: photo.userName, location: photo.location)
-                let photoToAdd = Photo(photoID: photo.photoID, user: user, urls: photoURLS, created_at: photo.createdAt)
+                let photoToAdd = Photo(id: photo.photoID, user: user, urls: photoURLS, created_at: photo.createdAt)
                 result.append(photoToAdd)
             }
             return result
@@ -164,6 +173,27 @@ final class Model: ModelProtocol {
             let decoder = JSONDecoder()
             do {
                 result = try decoder.decode(Welcome.self, from: data).results ?? []
+                completion(result)
+            } catch {
+                print("ERROR \(#function) \(error)")
+                onError(error)
+            }
+        }).resume()
+    }
+    
+    func getTotalAmountOfDownloads(photoID: String, completion: @escaping (Int) -> Void, onError: @escaping (Error) -> Void) {
+        guard var urlComponents = URLComponents(string: urlString + "photos/\(photoID)/statistics") else { return }
+        urlComponents.queryItems = [
+            URLQueryItem(name: "client_id", value: accessKey),
+        ]
+        guard let url = urlComponents.url else { return }
+        let request = URLRequest(url: url)
+        let _ = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            guard let data = data else { return }
+            let decoder = JSONDecoder()
+            var result = 0
+            do {
+                result = try decoder.decode(StructForDownloads.self, from: data).downloads?.total ?? 0
                 completion(result)
             } catch {
                 print("ERROR \(#function) \(error)")
