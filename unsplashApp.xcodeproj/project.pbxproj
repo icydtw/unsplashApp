@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0357F4A14AF7EB5C996BEDD0 /* Pods_unsplashApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE05F8FF7563860625DC5DAA /* Pods_unsplashApp.framework */; };
+		B4F5CB872A38B20F0012D8AC /* ImagesTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F5CB862A38B20F0012D8AC /* ImagesTableCell.swift */; };
 		B4FE5B802A36F6BA00C4B699 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FE5B7F2A36F6BA00C4B699 /* AppDelegate.swift */; };
 		B4FE5B822A36F6BA00C4B699 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FE5B812A36F6BA00C4B699 /* SceneDelegate.swift */; };
 		B4FE5B892A36F6BB00C4B699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4FE5B882A36F6BB00C4B699 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		3F2A0EA997892661C53BA481 /* Pods-unsplashApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unsplashApp.release.xcconfig"; path = "Target Support Files/Pods-unsplashApp/Pods-unsplashApp.release.xcconfig"; sourceTree = "<group>"; };
+		B4F5CB862A38B20F0012D8AC /* ImagesTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesTableCell.swift; sourceTree = "<group>"; };
 		B4FE5B7C2A36F6BA00C4B699 /* unsplashApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unsplashApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4FE5B7F2A36F6BA00C4B699 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4FE5B812A36F6BA00C4B699 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				B4FE5B9C2A3703F900C4B699 /* ImageCollectionCell.swift */,
+				B4F5CB862A38B20F0012D8AC /* ImagesTableCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -284,6 +287,7 @@
 			files = (
 				B4FE5BAC2A385ED300C4B699 /* SingleImageViewController.swift in Sources */,
 				B4FE5BA62A372E0C00C4B699 /* Alert.swift in Sources */,
+				B4F5CB872A38B20F0012D8AC /* ImagesTableCell.swift in Sources */,
 				B4FE5BA92A374BC500C4B699 /* DataModel.xcdatamodeld in Sources */,
 				B4FE5B952A36F85500C4B699 /* TabBarViewController.swift in Sources */,
 				B4FE5B972A36F95000C4B699 /* ImageFeedViewController.swift in Sources */,

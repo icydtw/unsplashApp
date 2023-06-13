@@ -35,6 +35,7 @@ final class TabBarViewController: UITabBarController {
         let model = Model()
         viewModel.model = model
         feed.viewModel = viewModel
+        favourites.viewModel = viewModel
         viewControllers = [feed, favourites]
     }
     
