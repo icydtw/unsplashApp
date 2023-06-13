@@ -9,6 +9,12 @@ import UIKit
 
 final class SingleImageViewController: UIViewController {
     
+    // MARK: - Properties
+    
+    var photo: Photo?
+    
+    // MARK: - Functions
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()

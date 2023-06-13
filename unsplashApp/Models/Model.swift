@@ -21,6 +21,7 @@ struct User: Codable {
 }
 
 struct Photo: Codable {
+    let photoID: String?
     let user: User?
     let urls: PhotoURLS?
     let created_at: String?
@@ -92,6 +93,7 @@ final class Model: ModelProtocol {
             return false
         }
         let newLikedPhoto = LikedImages(context: context)
+        newLikedPhoto.photoID = photo.photoID
         newLikedPhoto.createdAt = photo.created_at
         newLikedPhoto.location = photo.user?.location
         newLikedPhoto.urlFull = photo.urls?.full
@@ -138,7 +140,7 @@ final class Model: ModelProtocol {
             for photo in likedPhotos {
                 let photoURLS = PhotoURLS(full: photo.urlFull, small: photo.urlSmall)
                 let user = User(name: photo.userName, location: photo.location)
-                let photoToAdd = Photo(user: user, urls: photoURLS, created_at: photo.createdAt)
+                let photoToAdd = Photo(photoID: photo.photoID, user: user, urls: photoURLS, created_at: photo.createdAt)
                 result.append(photoToAdd)
             }
             return result
