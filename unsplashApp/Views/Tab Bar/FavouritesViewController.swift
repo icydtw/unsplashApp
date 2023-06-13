@@ -46,7 +46,6 @@ final class FavouritesViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: Notification.Name("liked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: Notification.Name("disliked"), object: nil)
         getLikedPhotos()
-        print(likedPhoto)
         view.addSubview(imagesTable)
         imagesTable.dataSource = self
         imagesTable.delegate = self

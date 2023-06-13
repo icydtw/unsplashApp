@@ -11,8 +11,15 @@ final class ImagesTableCell: UITableViewCell {
     
     let photoView: UIImageView = {
         let image = UIImageView()
+        image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
+    }()
+    
+    let image: UIImage = {
+        let image = UIImage(named: "plug")
+        
+        return image ?? UIImage()
     }()
     
     let authorName: UILabel = {
@@ -35,9 +42,9 @@ final class ImagesTableCell: UITableViewCell {
         NSLayoutConstraint.activate([
             photoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             photoView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            photoView.heightAnchor.constraint(equalToConstant: contentView.frame.height),
-            photoView.widthAnchor.constraint(equalToConstant: contentView.frame.height),
-            authorName.leadingAnchor.constraint(equalTo: photoView.trailingAnchor, constant: 8),
+            photoView.heightAnchor.constraint(equalToConstant: 40),
+            photoView.widthAnchor.constraint(equalToConstant: 40),
+            authorName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             authorName.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
@@ -45,6 +52,7 @@ final class ImagesTableCell: UITableViewCell {
     private func setupProperties() {
         contentView.addSubview(photoView)
         contentView.addSubview(authorName)
+        photoView.image = image
     }
     
 }
