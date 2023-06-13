@@ -81,6 +81,7 @@ extension FavouritesViewController: UITableViewDataSource {
         cell.authorName.text = likedPhoto[indexPath.row].user?.name
         cell.photoView.kf.setImage(with: url)
         cell.photoView.contentMode = .scaleAspectFit
+        cell.selectionStyle = .none
         return cell
     }
     
