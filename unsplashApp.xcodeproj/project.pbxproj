@@ -20,6 +20,7 @@
 		B4FE5BA32A370EDE00C4B699 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FE5BA22A370EDE00C4B699 /* Model.swift */; };
 		B4FE5BA62A372E0C00C4B699 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FE5BA52A372E0C00C4B699 /* Alert.swift */; };
 		B4FE5BA92A374BC500C4B699 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B4FE5BA72A374BC500C4B699 /* DataModel.xcdatamodeld */; };
+		B4FE5BAC2A385ED300C4B699 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FE5BAB2A385ED300C4B699 /* SingleImageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		B4FE5BA22A370EDE00C4B699 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		B4FE5BA52A372E0C00C4B699 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		B4FE5BA82A374BC500C4B699 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		B4FE5BAB2A385ED300C4B699 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		C6D3ADF4B8B308FC2492E5EA /* Pods-unsplashApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unsplashApp.debug.xcconfig"; path = "Target Support Files/Pods-unsplashApp/Pods-unsplashApp.debug.xcconfig"; sourceTree = "<group>"; };
 		EE05F8FF7563860625DC5DAA /* Pods_unsplashApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_unsplashApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -92,11 +94,10 @@
 		B4FE5B7E2A36F6BA00C4B699 /* unsplashApp */ = {
 			isa = PBXGroup;
 			children = (
+				B4FE5BAA2A385E2F00C4B699 /* Views */,
 				B4FE5BA42A372E0400C4B699 /* Helpers */,
 				B4FE5B9F2A370D6500C4B699 /* Models */,
 				B4FE5B9E2A370D5F00C4B699 /* ViewModels */,
-				B4FE5B9B2A3703D600C4B699 /* Cells */,
-				B4FE5B932A36F84700C4B699 /* Tab Bar */,
 				B4FE5B982A36F96000C4B699 /* Application */,
 				B4FE5B8D2A36F6BB00C4B699 /* Info.plist */,
 			);
@@ -155,6 +156,16 @@
 				B4FE5BA52A372E0C00C4B699 /* Alert.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		B4FE5BAA2A385E2F00C4B699 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B4FE5B9B2A3703D600C4B699 /* Cells */,
+				B4FE5B932A36F84700C4B699 /* Tab Bar */,
+				B4FE5BAB2A385ED300C4B699 /* SingleImageViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4FE5BAC2A385ED300C4B699 /* SingleImageViewController.swift in Sources */,
 				B4FE5BA62A372E0C00C4B699 /* Alert.swift in Sources */,
 				B4FE5BA92A374BC500C4B699 /* DataModel.xcdatamodeld in Sources */,
 				B4FE5B952A36F85500C4B699 /* TabBarViewController.swift in Sources */,

@@ -25,6 +25,7 @@ final class ImageFeedViewController: UIViewController {
     let imageCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.allowsSelection = true
         collection.register(ImageCollectionCell.self, forCellWithReuseIdentifier: "imageCell")
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
@@ -33,7 +34,6 @@ final class ImageFeedViewController: UIViewController {
     let searchBar: UISearchBar = {
         let bar = UISearchBar()
         bar.placeholder = "Search..."
-        
         bar.translatesAutoresizingMaskIntoConstraints = false
         return bar
     }()
@@ -71,6 +71,7 @@ final class ImageFeedViewController: UIViewController {
         searchBar.delegate = self
         likedPhotos = viewModel?.getLikedPhoto() ?? []
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
     
@@ -188,6 +189,11 @@ extension ImageFeedViewController: UICollectionViewDataSource {
 
 // MARK: - Extension for UICollectionViewDelegate
 extension ImageFeedViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let singleImageVC = SingleImageViewController()
+        present(singleImageVC, animated: true)
+    }
     
 }
 
